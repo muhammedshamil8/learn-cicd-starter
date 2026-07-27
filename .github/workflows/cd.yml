@@ -6,7 +6,7 @@ on:
 
 jobs:
   Deploy:
-    name: deploy 
+    name: Deploy 
     runs-on: ubuntu-latest
 
     steps:
@@ -20,4 +20,3 @@ jobs:
 
       - name: Build
         run: ./scripts/buildprod.sh
-        
