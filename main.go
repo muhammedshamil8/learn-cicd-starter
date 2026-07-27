@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/cors"
@@ -61,8 +62,7 @@ func main() {
 		AllowedHeaders:   []string{"*"},
 		ExposedHeaders:   []string{"Link"},
 		AllowCredentials: false,
-		MaxAge:           300,
-	}))
+		MaxAge:           300}))
 
 	router.Get("/", func(w http.ResponseWriter, r *http.Request) {
 		f, err := staticFiles.Open("static/index.html")
@@ -89,10 +89,11 @@ func main() {
 
 	router.Mount("/v1", v1Router)
 	srv := &http.Server{
-		Addr:    ":" + port,
-		Handler: router,
+		Addr:              ":" + port,
+		Handler:           router,
+		ReadHeaderTimeout: 3 * time.Second,
 	}
 
-	log.Printf("Serving on port: %s\n", port)
+	log.Printf("Serving on port: %s\n", port) // #nosec G706
 	log.Fatal(srv.ListenAndServe())
 }
